@@ -35,16 +35,15 @@ function onSearch(element) {
   }
 
   isShown = 0;
-  fetchGallery();
-  onRenderGallery(hits);
+  fetchGallery(onRenderGallery); // Pass the onRenderGallery function as a parameter
 }
 
 function onLoadMore() {
   newsApiService.incrementPage();
-  fetchGallery();
+  fetchGallery(onRenderGallery); // Pass the onRenderGallery function as a parameter
 }
 
-async function fetchGallery() {
+async function fetchGallery(callback) {
   refs.loadMoreBtn.classList.add('is-hidden');
 
   const result = await newsApiService.fetchGallery();
@@ -59,7 +58,7 @@ async function fetchGallery() {
     return;
   }
 
-  onRenderGallery(hits);
+  callback(hits); // Call the onRenderGallery function with the 'hits' parameter
   isShown += hits.length;
 
   if (isShown < total) {
